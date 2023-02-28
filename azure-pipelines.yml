@@ -23,7 +23,8 @@ stages:
     - task: Docker@2
       displayName: Build an image
       inputs:
-        command: build
+        command: 'buildAndPush'
+        containerRegistry: 'container-connection'
+        repository: 'alaincpn/voteapp'
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+        tags: $(tag)
