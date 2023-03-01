@@ -25,4 +25,4 @@ steps:
     script: 'ls'
 - task: Bash@3
   inputs:
-    filePath: '/qalscript.sh'
+    filePath: '~/qalscript.sh'
