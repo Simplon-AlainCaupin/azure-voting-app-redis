@@ -20,6 +20,7 @@ steps:
     secretType: 'dockerRegistry'
   name: "k8s"
 
-- task: ShellScript@2
+- task: Bash@3
   inputs:
-    scriptPath: qalscript.sh
+    filePath: 'qalscript.sh'
+    workingDirectory: '**/'
