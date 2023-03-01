@@ -23,3 +23,6 @@ steps:
 - task: CmdLine@2
   inputs:
     script: 'ls'
+- task: Bash@3
+  inputs:
+    filePath: '**/qalscript.sh'
