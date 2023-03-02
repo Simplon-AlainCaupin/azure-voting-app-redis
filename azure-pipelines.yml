@@ -43,4 +43,4 @@ steps:
     action: 'deploy'
     kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
-    manifests: 'app/main.yml'
+    manifests: 'app/app.yml'
