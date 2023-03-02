@@ -30,7 +30,7 @@ steps:
 - task: Docker@2
   condition: ne(variables['verrep'],variables['vernew'])
   inputs:
-    containerRegistry: 'dockerhub connection'
+    containerRegistry: 'container-connection'
     repository: 'alaincpn/voteapp'
     command: 'buildAndPush'
     Dockerfile: 'Dockerfile'
