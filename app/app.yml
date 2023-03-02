@@ -14,6 +14,7 @@ spec:
       labels:
         app: voteapplb
     spec:
+      progressDeadlineSeconds: 3600
       containers:
       - name: voteapp
         image: alaincpn/voteapp:latest
