@@ -41,6 +41,6 @@ steps:
   displayName: 'qaldeploy'
   inputs:
     action: 'deploy'
-    kubernetesServiceConnection: 'cluster-connection'
+    kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
     manifests: 'main.yml'
