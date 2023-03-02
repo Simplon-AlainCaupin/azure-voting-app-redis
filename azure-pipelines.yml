@@ -26,3 +26,21 @@ steps:
 - task: Bash@3
   inputs:
     filePath: 'qalscript.sh'
+
+- task: Docker@2
+  condition: ne(variables['verrep'],variables['vernew'])
+  inputs:
+    containerRegistry: 'dockerhub connection'
+    repository: 'alaincpn/voteapp'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+    tags: $(verdocker)
+
+- task: KubernetesManifest@0
+  name: qaldeploy
+  displayName: 'qaldeploy'
+  inputs:
+    action: 'deploy'
+    kubernetesServiceConnection: 'cluster-connection'
+    namespace: 'qal'
+    manifests: 'main.yml'
