@@ -27,21 +27,21 @@ steps:
   inputs:
     filePath: 'qalscript.sh'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'container-connection'
-    repository: 'alaincpn/voteapp'
-    command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
-    tags: |
-      $(verdock)
+#- task: Docker@2
+#  inputs:
+#    containerRegistry: 'container-connection'
+#    repository: 'alaincpn/voteapp'
+#    command: 'buildAndPush'
+#    Dockerfile: 'Dockerfile'
+#    tags: |
+#      $(verdock)
 
-- task: KubernetesManifest@0
-  name: qaldeploy
-  displayName: 'qaldeploy'
-  inputs:
-    action: 'deploy'
-    kubernetesServiceConnection: 'aks-connection'
-    namespace: 'qal'
-    manifests: 'app/app.yml'
+#- task: KubernetesManifest@0
+#  name: qaldeploy
+#  displayName: 'qaldeploy'
+#  inputs:
+#    action: 'deploy'
+#    kubernetesServiceConnection: 'aks-connection'
+#    namespace: 'qal'
+#    manifests: 'app/app.yml'
 
