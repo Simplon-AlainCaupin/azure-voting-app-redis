@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: voteapp
-        image: alaincpn/voteapp:latest
+        image: alaincpn/voteapp:1.0.0
         ports:
         - containerPort: 80
         resources:
