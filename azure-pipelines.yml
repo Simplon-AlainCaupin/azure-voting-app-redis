@@ -28,7 +28,6 @@ steps:
     filePath: 'qalscript.sh'
 
 - task: Docker@2
-  condition: ne(variables['verrep'],variables['vernew'])
   inputs:
     containerRegistry: 'container-connection'
     repository: 'alaincpn/voteapp'
