@@ -8,4 +8,4 @@ versionnew=$((curl 'https://hub.docker.com/v2/repositories/alaincpn/voteapp/tags
 versionold=$(echo $KUBE_KUBECTLOUTPUT | jq '.items[1].spec.template.spec.containers[].image' | cut -d: -f2 | sed 's/"//')
 echo "##vso[task.setvariable variable=vernew]$versionnew"
 echo "##vso[task.setvariable variable=verold]$versionold"
-sed -i 's/{{ version }}/'$versionnew'/g' app-deploy.yml
+sed -i 's/{{ version }}/'$versionnew'/g' ./app/app.yml
