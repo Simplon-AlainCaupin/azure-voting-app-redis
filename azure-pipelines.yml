@@ -33,7 +33,8 @@ steps:
     repository: 'alaincpn/voteapp'
     command: 'buildAndPush'
     Dockerfile: 'Dockerfile'
-    tags: $(verdocker)
+    tags: |
+      $(tag)
 
 - task: KubernetesManifest@0
   name: qaldeploy
@@ -43,3 +44,4 @@ steps:
     kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
     manifests: 'app/app.yml'
+
