@@ -28,7 +28,6 @@ stages:
 # qalscript.sh sur le repo
 
   - job: getversionsvars
-    dependsOn: kubesetup
     steps:
     - task: Bash@3
       inputs:
