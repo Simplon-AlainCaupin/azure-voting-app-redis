@@ -2,7 +2,7 @@ dockerhubversion=$((curl 'https://hub.docker.com/v2/repositories/alaincpn/voteap
 echo "Version sur dockerhub : "
 echo $dockerhubversion
 
-kubeoutputversion=$(echo $K8S_KUBECTLOUTPUT | jq '.items[1].spec.template.spec.containers[].image' | cut -d: -f2 | sed 's/"//')
+kubeoutputversion=$(echo $KUBS_KUBECTLOUTPUT | jq '.items[1].spec.template.spec.containers[].image' | cut -d: -f2 | sed 's/"//')
 echo "Version output kubectl : "
 echo $kubeoutputversion
 
