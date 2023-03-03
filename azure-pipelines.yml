@@ -22,7 +22,7 @@ stages:
         command: 'get'
         arguments: 'deployments'
         secretType: 'dockerRegistry'
-      name: "k8s"
+      name: "kubs"
 
 # Appel du script de récupération des variables dans le job getversionvars
 # qalscript.sh sur le repo
