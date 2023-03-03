@@ -20,9 +20,8 @@ steps:
     secretType: 'dockerRegistry'
   name: "k8s"
 
-- task: CmdLine@2
-  inputs:
-    script: 'ls'
+# Appel du script de récupération des variables :
+
 - task: Bash@3
   inputs:
     filePath: 'qalscript.sh'
@@ -36,14 +35,16 @@ steps:
     tags: |
       $(scrversion)
 
-#- task: KubernetesManifest@0
-#  name: qaldeploy
-#  displayName: 'qaldeploy'
-#  inputs:
-#    action: 'deploy'
-#    kubernetesServiceConnection: 'aks-connection'
-#    namespace: 'qal'
-#    manifests: 'app/app.yml'
+# Obsolete, tbd
+
+    #- task: KubernetesManifest@0
+    #  name: qaldeploy
+    #  displayName: 'qaldeploy'
+    #  inputs:
+    #    action: 'deploy'
+    #    kubernetesServiceConnection: 'aks-connection'
+    #    namespace: 'qal'
+    #    manifests: 'app/app.yml'
 
 - task: Docker@2
   condition: ne(variables['dockversion'],variables['scrversion'])
@@ -63,4 +64,4 @@ steps:
     action: 'deploy'
     kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
-    manifests: '**/app/app.yml'
+    manifests: './app/app.yml'
