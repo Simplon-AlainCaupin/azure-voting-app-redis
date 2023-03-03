@@ -61,3 +61,4 @@ steps:
     kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
     manifests: '**/app/*'
+    rolloutStatusTimeout: '60'
