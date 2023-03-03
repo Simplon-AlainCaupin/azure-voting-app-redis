@@ -26,39 +26,33 @@ steps:
   inputs:
     filePath: 'qalscript.sh'
 
-# - task: Docker@2
-#   inputs:
-#     containerRegistry: 'container-connection'
-#     repository: 'alaincpn/voteapp'
-#     command: 'buildAndPush'
-#     Dockerfile: 'Dockerfile'
-#     tags: |
-#       $(scrversion)
+- task: Docker@2
+  inputs:
+    containerRegistry: 'container-connection'
+    repository: 'alaincpn/voteapp'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+    tags: |
+      $(scrversion)
 
-# - task: Docker@2
-#   condition: ne(variables['dockversion'],variables['scrversion'])
-#   inputs:
-#     containerRegistry: 'container-connection'
-#     repository: 'alaincpn/voteapp'
-#     command: 'buildAndPush'
-#     Dockerfile: 'Dockerfile'
-#     tags: |
-#       $(scrversion)
-
-# - task: KubernetesManifest@0
-#   name: qaldeploy
-#   displayName: 'qaldeploy'
-#   condition: ne(variables['kubeoutpversion'],variables['scrversion'])
-#   inputs:
-#     action: 'deploy'
-#     kubernetesServiceConnection: 'aks-connection'
-#     namespace: 'qal'
-#     manifests: 'app/app.yml'
+- task: Docker@2
+  condition: ne(variables['dockversion'],variables['scrversion'])
+  inputs:
+    containerRegistry: 'container-connection'
+    repository: 'alaincpn/voteapp'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+    tags: |
+      $(scrversion)
 
 - task: KubernetesManifest@0
+  name: qaldeploy
+  displayName: 'qaldeploy'
+  condition: ne(variables['kubeoutpversion'],variables['scrversion'])
   inputs:
     action: 'deploy'
     kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
     manifests: 'app/app.yml'
     rolloutStatusTimeout: '60'
+
