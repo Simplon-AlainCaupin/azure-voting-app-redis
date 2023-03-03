@@ -45,12 +45,19 @@ steps:
     tags: |
       $(scrversion)
 
+# - task: KubernetesManifest@0
+#   name: qaldeploy
+#   displayName: 'qaldeploy'
+#   condition: ne(variables['kubeoutpversion'],variables['scrversion'])
+#   inputs:
+#     action: 'deploy'
+#     kubernetesServiceConnection: 'aks-connection'
+#     namespace: 'qal'
+#     manifests: 'app/app.yml'
+
 - task: KubernetesManifest@0
-  name: qaldeploy
-  displayName: 'qaldeploy'
-  condition: ne(variables['kubeoutpversion'],variables['scrversion'])
   inputs:
     action: 'deploy'
     kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
-    manifests: 'app/app.yml'
+    manifests: '**/app/*'
