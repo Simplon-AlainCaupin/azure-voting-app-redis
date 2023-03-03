@@ -35,15 +35,15 @@ steps:
     tags: |
       $(scrversion)
 
-- task: Docker@2
-  condition: ne(variables['dockversion'],variables['scrversion'])
-  inputs:
-    containerRegistry: 'container-connection'
-    repository: 'alaincpn/voteapp'
-    command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
-    tags: |
-      $(scrversion)
+# - task: Docker@2
+#   condition: ne(variables['dockversion'],variables['scrversion'])
+#   inputs:
+#     containerRegistry: 'container-connection'
+#     repository: 'alaincpn/voteapp'
+#     command: 'buildAndPush'
+#     Dockerfile: 'Dockerfile'
+#     tags: |
+#       $(scrversion)
 
 # - task: KubernetesManifest@0
 #   name: qaldeploy
