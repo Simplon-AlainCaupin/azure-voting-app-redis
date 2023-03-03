@@ -8,60 +8,59 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
+stages:
+- stage: kubesetup
+  jobs:
+  - job: connectkube
+    steps:
 
-- task: Kubernetes@1
-  inputs:
-    connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceEndpoint: 'aks-connection'
-    namespace: 'qal'
-    command: 'get'
-    arguments: 'deployments'
-    secretType: 'dockerRegistry'
-  name: "k8s"
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'aks-connection'
+        namespace: 'qal'
+        command: 'get'
+        arguments: 'deployments'
+        secretType: 'dockerRegistry'
+      name: "k8s"
 
 # Appel du script de récupération des variables :
 
-- task: Bash@3
-  inputs:
-    filePath: 'qalscript.sh'
+- stage: scripts
+  jobs:
+  - job: getvars
+    steps:
+    - task: Bash@3
+      inputs:
+        filePath: 'qalscript.sh'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'container-connection'
-    repository: 'alaincpn/voteapp'
-    command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
-    tags: |
-      $(scrversion)
+- stage: docker
+  jobs:
+  - job: buildandpush
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'container-connection'
+        repository: 'alaincpn/voteapp'
+        command: 'buildAndPush'
+        Dockerfile: 'Dockerfile'
+        tags: |
+          $(scrversion)
 
-- task: Docker@2
-  condition: ne(variables['dockversion'],variables['scrversion'])
-  inputs:
-    containerRegistry: 'container-connection'
-    repository: 'alaincpn/voteapp'
-    command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
-    tags: |
-      $(scrversion)
-
-# Script montée en charge
-
-#- task: CmdLine@2
-#  inputs:
-#    script: |
-#      seq 20 | parallel --max-args 0  --jobs 20 "curl -k -iF 'vote=linux' http://20.74.118.200"
-
-- task: KubernetesManifest@0
-  name: qaldeploy
-  displayName: 'qaldeploy'
-  condition: ne(variables['kubeoutpversion'],variables['scrversion'])
-  inputs:
-    action: 'deploy'
-    kubernetesServiceConnection: 'aks-connection'
-    namespace: 'qal'
-    manifests: 'app/app.yml'
-    rolloutStatusTimeout: '60'
+- stage: qal
+  jobs:
+  - job: qaldeploy
+    steps: 
+    - task: KubernetesManifest@0
+      name: qaldeploy
+      displayName: 'qaldeploy'
+      condition: ne(variables['kubeoutpversion'],variables['scrversion'])
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'aks-connection'
+        namespace: 'qal'
+        manifests: 'app/app.yml'
+        rolloutStatusTimeout: '60'
 
 # - task: KubernetesManifest@0
 #   name: kubecanary
