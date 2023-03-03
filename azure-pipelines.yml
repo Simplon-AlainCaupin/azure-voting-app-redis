@@ -28,13 +28,13 @@ stages:
 # qalscript.sh sur le repo
 
   - job: getversionsvars
+    dependsOn: connectkube
     steps:
     - task: Bash@3
       inputs:
         filePath: 'qalscript.sh'
   - job: buildandpush
-    dependsOn: getversionsvars
-    condition: succeeded()
+    dependsOn: kubesetup
     steps:
     - task: Docker@2
       inputs:
