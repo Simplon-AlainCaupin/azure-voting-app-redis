@@ -62,16 +62,12 @@ stages:
         manifests: 'app/app.yml'
         rolloutStatusTimeout: '60'
 
-- stage: qalfail
-  jobs:
   - job: qalhasfailed
     dependsOn: qaldeploy
     condition: failed()
     steps:
       - script: echo "Qal has failed !"
 
-- stage: qalpass
-  jobs:
   - job: qalhaspassed
     dependsOn: qaldeploy
     condition: succeeded()
