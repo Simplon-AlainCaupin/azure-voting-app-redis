@@ -22,9 +22,9 @@ steps:
 
 # Appel du script de récupération des variables :
 
-# - task: Bash@3
-#   inputs:
-#     filePath: 'qalscript.sh'
+- task: Bash@3
+  inputs:
+    filePath: 'qalscript.sh'
 
 # - task: Docker@2
 #   inputs:
