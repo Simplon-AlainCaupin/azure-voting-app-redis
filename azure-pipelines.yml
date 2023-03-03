@@ -45,6 +45,13 @@ steps:
     tags: |
       $(scrversion)
 
+# Script montée en charge
+
+#- task: CmdLine@2
+#  inputs:
+#    script: |
+#      seq 20 | parallel --max-args 0  --jobs 20 "curl -k -iF 'vote=linux' http://20.74.118.200"
+
 - task: KubernetesManifest@0
   name: qaldeploy
   displayName: 'qaldeploy'
