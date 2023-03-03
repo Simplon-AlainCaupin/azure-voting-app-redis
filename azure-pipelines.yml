@@ -60,4 +60,4 @@ steps:
     action: 'deploy'
     kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
-    manifests: '**/app/*'
+    manifests: '**/azure-voting-app-redis/app/*'
