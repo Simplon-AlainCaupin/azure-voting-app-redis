@@ -74,7 +74,7 @@ stages:
   jobs:
   - job: qalhaspassed
     dependsOn: qaldeploy
-    condition: succeded()
+    condition: succeeded()
     steps:
       - script: echo "Qal has passed !"
   
