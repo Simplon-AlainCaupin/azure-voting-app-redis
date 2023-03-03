@@ -26,10 +26,6 @@ steps:
   inputs:
     filePath: 'qalscript.sh'
 
-- task: Bash@3
-  inputs:
-    filePath: 'auto_maj.sh'
-
 - task: Docker@2
   inputs:
     containerRegistry: 'container-connection'
