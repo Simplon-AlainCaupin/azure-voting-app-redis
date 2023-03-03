@@ -24,18 +24,16 @@ stages:
         secretType: 'dockerRegistry'
       name: "k8s"
 
-# Appel du script de récupération des variables :
+# Appel du script de récupération des variables dans le job getversionvars
+# qalscript.sh sur le repo
 
-- stage: scripts
+- stage: docker
   jobs:
-  - job: getvars
+  - job: getversionsvars
     steps:
     - task: Bash@3
       inputs:
         filePath: 'qalscript.sh'
-
-- stage: docker
-  jobs:
   - job: buildandpush
     steps:
     - task: Docker@2
