@@ -14,4 +14,4 @@ echo "##vso[task.setvariable variable=dockversion]$dockerhubversion"
 echo "##vso[task.setvariable variable=kubeoutpversion]$kubeoutputversion"
 echo "##vso[task.setvariable variable=scrversion]$scriptversion"
 
-sed -i 's/{{ version }}/'$versionnew'/g' ./app/app.yml
+sed -i 's/{{ version }}/'$scriptversion'/g' ./app/app.yml
