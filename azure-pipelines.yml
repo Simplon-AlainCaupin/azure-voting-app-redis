@@ -22,28 +22,28 @@ steps:
 
 # Appel du script de récupération des variables :
 
-- task: Bash@3
-  inputs:
-    filePath: 'qalscript.sh'
+# - task: Bash@3
+#   inputs:
+#     filePath: 'qalscript.sh'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'container-connection'
-    repository: 'alaincpn/voteapp'
-    command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
-    tags: |
-      $(scrversion)
+# - task: Docker@2
+#   inputs:
+#     containerRegistry: 'container-connection'
+#     repository: 'alaincpn/voteapp'
+#     command: 'buildAndPush'
+#     Dockerfile: 'Dockerfile'
+#     tags: |
+#       $(scrversion)
 
-- task: Docker@2
-  condition: ne(variables['dockversion'],variables['scrversion'])
-  inputs:
-    containerRegistry: 'container-connection'
-    repository: 'alaincpn/voteapp'
-    command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
-    tags: |
-      $(scrversion)
+# - task: Docker@2
+#   condition: ne(variables['dockversion'],variables['scrversion'])
+#   inputs:
+#     containerRegistry: 'container-connection'
+#     repository: 'alaincpn/voteapp'
+#     command: 'buildAndPush'
+#     Dockerfile: 'Dockerfile'
+#     tags: |
+#       $(scrversion)
 
 # - task: KubernetesManifest@0
 #   name: qaldeploy
@@ -60,4 +60,4 @@ steps:
     action: 'deploy'
     kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
-    manifests: '**/azure-voting-app-redis/app/*'
+    manifests: '**/app/*'
