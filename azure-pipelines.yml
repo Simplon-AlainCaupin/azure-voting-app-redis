@@ -62,14 +62,32 @@ stages:
         manifests: 'app/app.yml'
         rolloutStatusTimeout: '60'
 
-# - task: KubernetesManifest@0
-#   name: kubecanary
-#   condition: ne(variables['kubeoutpversion'],variables['scrversion'])
-#   inputs:
-#     action: 'deploy'
-#     kubernetesServiceConnection: 'aks-connection'
-#     namespace: 'prod'
-#     strategy: 'canary'
-#     percentage: '10'
-#     manifests: 'app/app.yml'
-#     rolloutStatusTimeout: '60'
+- stage: qalfail
+  jobs:
+  - job: qalhasfailed
+    dependsOn: qaldeploy
+    condition: failed()
+    steps:
+      - script: echo "Qal has failed !"
+
+- stage: qalpass
+  jobs:
+  - job: qalhaspassed
+    dependsOn: qaldeploy
+    condition: succeded()
+    steps:
+      - script: echo "Qal has passed !"
+  
+  - job: kubecanary
+    steps:
+    - task: KubernetesManifest@0
+      name: kubecanary
+      condition: ne(variables['kubeoutpversion'],variables['scrversion'])
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'aks-connection'
+        namespace: 'prod'
+        strategy: 'canary'
+        percentage: '10'
+        manifests: 'app/app.yml'
+        rolloutStatusTimeout: '60'
