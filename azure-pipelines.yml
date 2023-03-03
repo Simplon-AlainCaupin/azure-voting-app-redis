@@ -27,14 +27,14 @@ steps:
   inputs:
     filePath: 'qalscript.sh'
 
-#- task: Docker@2
-#  inputs:
-#    containerRegistry: 'container-connection'
-#    repository: 'alaincpn/voteapp'
-#    command: 'buildAndPush'
-#    Dockerfile: 'Dockerfile'
-#    tags: |
-#      $(verdock)
+- task: Docker@2
+  inputs:
+    containerRegistry: 'container-connection'
+    repository: 'alaincpn/voteapp'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+    tags: |
+      $(vernew)
 
 #- task: KubernetesManifest@0
 #  name: qaldeploy
