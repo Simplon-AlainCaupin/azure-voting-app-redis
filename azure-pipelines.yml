@@ -35,17 +35,6 @@ steps:
     tags: |
       $(scrversion)
 
-# Obsolete, tbd
-
-    #- task: KubernetesManifest@0
-    #  name: qaldeploy
-    #  displayName: 'qaldeploy'
-    #  inputs:
-    #    action: 'deploy'
-    #    kubernetesServiceConnection: 'aks-connection'
-    #    namespace: 'qal'
-    #    manifests: 'app/app.yml'
-
 - task: Docker@2
   condition: ne(variables['dockversion'],variables['scrversion'])
   inputs:
@@ -64,4 +53,4 @@ steps:
     action: 'deploy'
     kubernetesServiceConnection: 'aks-connection'
     namespace: 'qal'
-    manifests: './app/app.yml'
+    manifests: 'app/app.yml'
