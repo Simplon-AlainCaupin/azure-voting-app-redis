@@ -56,3 +56,14 @@ steps:
     manifests: 'app/app.yml'
     rolloutStatusTimeout: '60'
 
+- task: KubernetesManifest@0
+  name: kubecanary
+  condition: ne(variables['kubeoutpversion'],variables['scrversion'])
+  inputs:
+    action: 'deploy'
+    kubernetesServiceConnection: 'aks-connection'
+    namespace: 'prod'
+    strategy: 'canary'
+    percentage: '10'
+    manifests: 'app/app.yml'
+    rolloutStatusTimeout: '60'
