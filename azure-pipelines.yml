@@ -34,7 +34,7 @@ stages:
       inputs:
         filePath: 'qalscript.sh'
   - job: buildandpush
-    dependsOn: kubesetup
+    dependsOn: getversionvars
     steps:
     - task: Docker@2
       inputs:
