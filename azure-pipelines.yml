@@ -32,15 +32,9 @@ stages:
         filePath: 'qalscript.sh'
 
 
-- stage: getversion
+- stage: dockerimage
   jobs:
-  - job: getversionsvars
-    steps:
-    - task: Bash@3
-      inputs:
-        filePath: 'qalscript.sh'
   - job: buildandpush
-    dependsOn: getversionsvars
     steps:
     - task: Docker@2
       inputs:
