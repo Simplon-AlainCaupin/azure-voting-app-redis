@@ -30,12 +30,6 @@ stages:
     - task: Bash@3
       inputs:
         filePath: 'qalscript.sh'
-
-
-- stage: dockerimage
-  jobs:
-  - job: buildandpush
-    steps:
     - task: Docker@2
       inputs:
         containerRegistry: 'container-connection'
@@ -45,8 +39,9 @@ stages:
         tags: |
           $(scrversion)
 
+- stage: dockerimage
+  jobs:
   - job: qaldeploy
-    dependsOn: buildandpush
     steps: 
     - task: KubernetesManifest@0
       name: qaldeploy
