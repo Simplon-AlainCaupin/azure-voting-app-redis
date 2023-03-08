@@ -46,6 +46,7 @@ stages:
           $(scrversion)
 
   - job: qaldeploy
+    dependsOn: buildandpush
     steps: 
     - task: KubernetesManifest@0
       name: qaldeploy
@@ -71,6 +72,7 @@ stages:
       - script: echo "Qal has passed !"
   
   - job: kubecanary
+    dependsOn: qalhaspassed
     steps:
     - task: KubernetesManifest@0
       name: kubecanary
