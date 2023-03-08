@@ -1,9 +1,8 @@
 # Procédure déploiement via pipeline AzureDevops
 
-## 1 - Fonctionnement général Pipeline
+## 1 - Fonctionnement général Pipeline prévu
 
 ![](https://i.imgur.com/aa3JgJM.png)
-
 
 
 ## 2 - Listing actions pipeline AzureDevops
