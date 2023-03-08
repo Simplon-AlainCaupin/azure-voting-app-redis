@@ -26,9 +26,9 @@ stages:
 
 # Appel du script de récupération des variables dans le job getversionvars
 # qalscript.sh sur le repo
-
+- stage: getversion
+  jobs:
   - job: getversionsvars
-    dependsOn: connectkube
     steps:
     - task: Bash@3
       inputs:
