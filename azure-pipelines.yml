@@ -27,6 +27,10 @@ stages:
 # Appel du script de récupération des variables dans le job getversionvars
 # qalscript.sh sur le repo
 
+- stage: dockerimage
+  jobs:
+  - job: qaldeploy
+    steps: 
     - task: Bash@3
       inputs:
         filePath: 'qalscript.sh'
@@ -38,11 +42,6 @@ stages:
         Dockerfile: 'Dockerfile'
         tags: |
           $(scrversion)
-
-- stage: dockerimage
-  jobs:
-  - job: qaldeploy
-    steps: 
     - task: KubernetesManifest@0
       name: qaldeploy
       displayName: 'qaldeploy'
