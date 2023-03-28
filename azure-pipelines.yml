@@ -40,12 +40,12 @@ stages:
         echo "##vso[task.setvariable variable=dockversion]$dockerhubversion"
         echo "##vso[task.setvariable variable=kubeoutpversion]$kubeoutputversion"
         echo "##vso[task.setvariable variable=scrversion]$scriptversion"
-        sed -i 's/{{ version }}/'$scriptversion'/g' ./app.yml
-
+        sed -i 's/{{ version }}/'$scriptversion'/g' app/app.yml
+      name: "vers"
     # - task: Bash@3
     #   inputs:
     #     filePath: 'qalscript.sh'
-    #   name: "vers"
+
 
 # Appel du script de récupération des variables dans le job getversionvars
 # qalscript.sh sur le repo
