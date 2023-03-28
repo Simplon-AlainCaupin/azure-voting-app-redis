@@ -38,8 +38,8 @@ stages:
   jobs:
   - job: qaldeploy
     variables:
-      oldversion: $[ stageDependencies.Get_Versions.Get_Versions.outputs['vers.kubeoutpversion'] ]
-      newversion: $[ stageDependencies.Get_Versions.Get_Versions.outputs['vers.scrversion'] ]
+      oldversion: $[ stageDependencies.Get_Versions.connectkube.outputs['vers.kubeoutpversion'] ]
+      newversion: $[ stageDependencies.Get_Versions.connectkube.outputs['vers.scrversion'] ]
     displayName: qaldeploy
     pool:
       vmImage: ubuntu-latest 
