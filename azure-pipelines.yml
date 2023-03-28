@@ -44,15 +44,26 @@ stages:
     pool:
       vmImage: ubuntu-latest 
     steps:
-    - task: Docker@2
-      condition: ne(variables.verrep,variables.vernew)
+
+    - task: Bash@3
       inputs:
-        containerRegistry: 'container-connection'
-        repository: 'alaincpn/voteapp'
-        command: 'buildAndPush'
-        Dockerfile: 'Dockerfile'
-        tags: $(newversion)
-      name: "dockerup"
+        targetType: 'inline'
+        script: |
+          echo "outputs"
+          echo $kubeoutpversion
+          echo $scrversion
+          echo "pipeline vars"
+          echo $oldversion
+          echo $newversion
+    # - task: Docker@2
+    #   condition: ne(variables.verrep,variables.vernew)
+    #   inputs:
+    #     containerRegistry: 'container-connection'
+    #     repository: 'alaincpn/voteapp'
+    #     command: 'buildAndPush'
+    #     Dockerfile: 'Dockerfile'
+    #     tags: $(newversion)
+    #   name: "dockerup"
 
 
 
