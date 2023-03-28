@@ -71,9 +71,6 @@ stages:
           echo "outputs"
           echo $kubeoutpversion
           echo $scrversion
-          echo "pipeline vars"
-          echo $oldversion
-          echo $newversion
     # - task: Docker@2
     #   condition: ne(variables.verrep,variables.vernew)
     #   inputs:
