@@ -33,20 +33,21 @@ stages:
           script: |
             ls -ll
             echo "------"
-            dockerhubversion=$((curl 'https://hub.docker.com/v2/repositories/alaincpn/voteapp/tags' | jq '."results"[0]["name"]')| sed 's/\"//g')
+            export dockerhubversion=$((curl 'https://hub.docker.com/v2/repositories/alaincpn/voteapp/tags' | jq '."results"[0]["name"]')| sed 's/\"//g')
             echo "Version sur dockerhub : "
             echo $dockerhubversion
-            kubeoutputversion=$(echo $KUBS_KUBECTLOUTPUT | jq '.items[1].spec.template.spec.containers[].image' | cut -d: -f2 | sed 's/"//')
+            export kubeoutputversion=$(echo $KUBS_KUBECTLOUTPUT | jq '.items[1].spec.template.spec.containers[].image' | cut -d: -f2 | sed 's/"//')
             echo "Version output kubectl : "
             echo $kubeoutputversion
-            scriptversion=$(cat azure-vote/main.py | grep -E "^ver = \"[0-9.]+\"\$"|awk -F\" {'print $2'})
+            export scriptversion=$(cat azure-vote/main.py | grep -E "^ver = \"[0-9.]+\"\$"|awk -F\" {'print $2'})
             echo "Version dans le script : "
             echo $scriptversion
-            echo "##vso[task.setvariable variable=dockversion]$dockerhubversion"
-            echo "##vso[task.setvariable variable=kubeoutpversion]$kubeoutputversion"
-            echo "##vso[task.setvariable variable=scrversion]$scriptversion"
+            echo "##vso[task.setvariable variable=dockversion;isOutput=true]$dockerhubversion"
+            echo "##vso[task.setvariable variable=kubeoutpversion;isOutput=true]$kubeoutputversion"
+            echo "##vso[task.setvariable variable=scrversion;isOutput=true]$scriptversion"
             sed -i 's/{{ version }}/'$scriptversion'/g' app/app.yml
         name: vers
+
     # - task: Bash@3
     #   inputs:
     #     filePath: 'qalscript.sh'
