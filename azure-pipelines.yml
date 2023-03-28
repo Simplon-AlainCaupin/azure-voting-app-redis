@@ -89,12 +89,12 @@ stages:
         tags: $(newversion)
       name: "dockerup"
 
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'container-connection'
-        repository: 'alaincpn/voteapp'
-        command: 'buildAndPush'
-        Dockerfile: 'Dockerfile'
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'container-connection'
+    #     repository: 'alaincpn/voteapp'
+    #     command: 'buildAndPush'
+    #     Dockerfile: 'Dockerfile'
 
     - task: KubernetesManifest@0
       name: qaldeploy
