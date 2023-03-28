@@ -23,59 +23,83 @@ stages:
         arguments: 'deployments'
         secretType: 'dockerRegistry'
       name: "kubs"
+    - task: Bash@3
+      inputs:
+        filePath: 'qalscript.sh'
+      name: "vers"
 
 # Appel du script de récupération des variables dans le job getversionvars
 # qalscript.sh sur le repo
 
 - stage: dockerimage
+  dependsOn:
+  - kubesetup
+  displayName: dockerimage
   jobs:
   - job: qaldeploy
-    steps: 
-    - task: Bash@3
-      inputs:
-        filePath: 'qalscript.sh'
+    variables:
+      oldversion: $[ stageDependencies.Get_Versions.Get_Versions.outputs['vers.kubeoutpversion'] ]
+      newversion: $[ stageDependencies.Get_Versions.Get_Versions.outputs['vers.scrversion'] ]
+    displayName: qaldeploy
+    pool:
+      vmImage: ubuntu-latest 
+    steps:
     - task: Docker@2
+      condition: ne(variables.verrep,variables.vernew)
       inputs:
         containerRegistry: 'container-connection'
         repository: 'alaincpn/voteapp'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
-        tags: |
-          $(scrversion)
-    - task: KubernetesManifest@0
-      name: qaldeploy
-      displayName: 'qaldeploy'
-      condition: ne(variables['kubeoutpversion'],variables['scrversion'])
-      inputs:
-        action: 'deploy'
-        kubernetesServiceConnection: 'aks-connection'
-        namespace: 'qal'
-        manifests: 'app/app.yml'
-        rolloutStatusTimeout: '60'
+        tags: $(newversion)
+      name: "dockerup"
 
-  - job: qalhasfailed
-    dependsOn: qaldeploy
-    condition: failed()
-    steps:
-      - script: echo "Qal has failed !"
 
-  - job: qalhaspassed
-    dependsOn: qaldeploy
-    condition: succeeded()
-    steps:
-      - script: echo "Qal has passed !"
+
+
+
+      # steps:
+      # - task: Docker@2
+      # inputs:
+      #   containerRegistry: 'container-connection'
+      #   repository: 'alaincpn/voteapp'
+      #   command: 'buildAndPush'
+      #   Dockerfile: 'Dockerfile'
+
+      # - task: KubernetesManifest@0
+      #   name: qaldeploy
+      #   displayName: 'qaldeploy'
+      #   condition: ne(variables['kubeoutpversion'],variables['scrversion'])
+      #   inputs:
+      #     action: 'deploy'
+      #     kubernetesServiceConnection: 'aks-connection'
+      #     namespace: 'qal'
+      #     manifests: 'app/app.yml'
+      #     rolloutStatusTimeout: '60'
+
+  # - job: qalhasfailed
+  #   dependsOn: qaldeploy
+  #   condition: failed()
+  #   steps:
+  #     - script: echo "Qal has failed !"
+
+  # - job: qalhaspassed
+  #   dependsOn: qaldeploy
+  #   condition: succeeded()
+  #   steps:
+  #     - script: echo "Qal has passed !"
   
-  - job: kubecanary
-    dependsOn: qalhaspassed
-    steps:
-    - task: KubernetesManifest@0
-      name: kubecanary
-      condition: ne(variables['kubeoutpversion'],variables['scrversion'])
-      inputs:
-        action: 'deploy'
-        kubernetesServiceConnection: 'aks-connection'
-        namespace: 'prod'
-        strategy: 'canary'
-        percentage: '10'
-        manifests: 'app/app.yml'
-        rolloutStatusTimeout: '60'
+  # - job: kubecanary
+  #   dependsOn: qalhaspassed
+  #   steps:
+  #   - task: KubernetesManifest@0
+  #     name: kubecanary
+  #     condition: ne(variables['kubeoutpversion'],variables['scrversion'])
+  #     inputs:
+  #       action: 'deploy'
+  #       kubernetesServiceConnection: 'aks-connection'
+  #       namespace: 'prod'
+  #       strategy: 'canary'
+  #       percentage: '10'
+  #       manifests: 'app/app.yml'
+  #       rolloutStatusTimeout: '60'
