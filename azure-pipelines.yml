@@ -54,6 +54,7 @@ stages:
 - stage: dockerimage
   dependsOn:
   - kubesetup
+  condition: succeeded()
   displayName: dockerimage
   jobs:
   - job: qaldeploy
