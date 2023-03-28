@@ -76,8 +76,8 @@ stages:
         targetType: 'inline'
         script: |
           echo "outputs"
-          echo $oldversion
-          echo $newversion
+          echo $[ stageDependencies.kubesetup.getvars.outputs['vers.kubeoutpversion'] ]
+          echo $[ stageDependencies.kubesetup.getvars.outputs['vers.scrversion'] ]
          
     - task: Docker@2
       condition: ne(variables.oldversion,variables.newversion)
