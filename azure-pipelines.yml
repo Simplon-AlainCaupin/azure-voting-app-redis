@@ -54,8 +54,8 @@ stages:
     - connectkube
     condition: succeeded()
     variables:
-      oldversion: $[ dependencies.kubesetup.connectkube.outputs['vers.kubeoutpversion'] ]
-      newversion: $[ dependencies.kubesetup.connectkube.outputs['vers.scrversion'] ]
+      oldversion: $[ dependencies.connectkube.outputs['vers.kubeoutpversion'] ]
+      newversion: $[ dependencies.connectkube.outputs['vers.scrversion'] ]
     displayName: qaldeploy
     pool:
       vmImage: ubuntu-latest 
