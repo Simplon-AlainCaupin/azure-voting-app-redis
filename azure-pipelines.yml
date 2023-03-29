@@ -46,6 +46,7 @@ stages:
             echo "##vso[task.setvariable variable=kubeoutpversion;isOutput=true]$kubeoutputversion"
             echo "##vso[task.setvariable variable=scrversion;isOutput=true]$scriptversion"
             sed -i 's/{{ version }}/'$scriptversion'/g' app/app.yml
+            cat app/app.yml
         name: vers
 
     # - task: Bash@3
@@ -56,38 +57,38 @@ stages:
 # Appel du script de récupération des variables dans le job getversionvars
 # qalscript.sh sur le repo
 
-- stage: dockerimage
-  dependsOn:
-  - kubesetup
-  condition: succeeded()
-  displayName: dockerimage
-  jobs:
-  - job: qaldeploy
-    variables:
-      oldversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.kubeoutpversion'] ]
-      newversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.scrversion'] ]
-    displayName: qaldeploy
-    pool:
-      vmImage: ubuntu-latest 
-    steps:
+# - stage: dockerimage
+#   dependsOn:
+#   - kubesetup
+#   condition: succeeded()
+#   displayName: dockerimage
+#   jobs:
+#   - job: qaldeploy
+#     variables:
+#       oldversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.kubeoutpversion'] ]
+#       newversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.scrversion'] ]
+#     displayName: qaldeploy
+#     pool:
+#       vmImage: ubuntu-latest 
+#     steps:
 
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: |
-          echo "outputs"
-          echo $oldversion
-          echo $newversion
+#     - task: Bash@3
+#       inputs:
+#         targetType: 'inline'
+#         script: |
+#           echo "outputs"
+#           echo $oldversion
+#           echo $newversion
          
-    - task: Docker@2
-      condition: ne(variables.oldversion,variables.newversion)
-      inputs:
-        containerRegistry: 'container-connection'
-        repository: 'alaincpn/voteapp'
-        command: 'buildAndPush'
-        Dockerfile: 'Dockerfile'
-        tags: $(newversion)
-      name: "dockerup"
+#     - task: Docker@2
+#       condition: ne(variables.oldversion,variables.newversion)
+#       inputs:
+#         containerRegistry: 'container-connection'
+#         repository: 'alaincpn/voteapp'
+#         command: 'buildAndPush'
+#         Dockerfile: 'Dockerfile'
+#         tags: $(newversion)
+#       name: "dockerup"
 
     # - task: Docker@2
     #   inputs:
@@ -96,16 +97,16 @@ stages:
     #     command: 'buildAndPush'
     #     Dockerfile: 'Dockerfile'
 
-    - task: KubernetesManifest@0
-      name: qaldeploy
-      displayName: 'qaldeploy'
-      condition: ne(variables.oldversion,variables.newversion)
-      inputs:
-        action: 'deploy'
-        kubernetesServiceConnection: 'aks-connection'
-        namespace: 'qal'
-        manifests: 'app/app.yml'
-        rolloutStatusTimeout: '90'
+    # - task: KubernetesManifest@0
+    #   name: qaldeploy
+    #   displayName: 'qaldeploy'
+    #   condition: ne(variables.oldversion,variables.newversion)
+    #   inputs:
+    #     action: 'deploy'
+    #     kubernetesServiceConnection: 'aks-connection'
+    #     namespace: 'qal'
+    #     manifests: 'app/app.yml'
+    #     rolloutStatusTimeout: '90'
 
   # - job: qalhasfailed
   #   dependsOn: qaldeploy
