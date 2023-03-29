@@ -49,6 +49,23 @@ stages:
             cat app/app.yml
         name: vers
 
+  - job: qaldeploy
+    variables:
+      oldversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.kubeoutpversion'] ]
+      newversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.scrversion'] ]
+    displayName: qaldeploy
+    pool:
+      vmImage: ubuntu-latest 
+    steps:
+
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo "outputs"
+          echo $oldversion
+          echo $newversion
+
     # - task: Bash@3
     #   inputs:
     #     filePath: 'qalscript.sh'
