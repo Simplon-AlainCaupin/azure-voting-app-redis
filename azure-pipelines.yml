@@ -68,7 +68,7 @@ stages:
           echo "new version :"
           echo $(newversion)
           echo "dockerhub version :"
-          echo $(dockversion)
+          echo $(repversion)
 
     - task: CmdLine@2
       name: updateyml
