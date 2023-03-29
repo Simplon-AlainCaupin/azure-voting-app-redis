@@ -69,6 +69,7 @@ stages:
           echo $(newversion)
           echo "dockerhub version :"
           echo $(repversion)
+      name: debugVars
 
     - task: CmdLine@2
       name: updateyml
