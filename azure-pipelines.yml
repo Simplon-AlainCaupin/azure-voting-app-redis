@@ -50,6 +50,9 @@ stages:
         name: vers
 
   - job: qaldeploy
+    dependsOn:
+    - getvars
+    condition: succeeded()
     variables:
       oldversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.kubeoutpversion'] ]
       newversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.scrversion'] ]
