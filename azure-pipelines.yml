@@ -23,11 +23,7 @@ stages:
         arguments: 'deployments'
         secretType: 'dockerRegistry'
       name: "kubs"
-  # - job: getvars
-  #   dependsOn: 
-  #   - connectkube
-  #   condition: succeeded()
-  #   steps:
+
     - task: CmdLine@2
       inputs:
         script: |
@@ -69,13 +65,16 @@ stages:
           echo $(oldversion)
           echo $(newversion)
 
-    # - task: Bash@3
-    #   inputs:
-    #     filePath: 'qalscript.sh'
-
-
-# Appel du script de récupération des variables dans le job getversionvars
-# qalscript.sh sur le repo
+    - task: KubernetesManifest@0
+      name: qaldeploy
+      displayName: 'qaldeploy'
+      condition: ne(variables.oldversion,variables.newversion)
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'aks-connection'
+        namespace: 'qal'
+        manifests: 'app/app.yml'
+        rolloutStatusTimeout: '90'
 
 # - stage: dockerimage
 #   dependsOn:
