@@ -52,6 +52,7 @@ stages:
     variables:
       oldversion: $[ dependencies.connectkube.outputs['vers.kubeoutpversion'] ]
       newversion: $[ dependencies.connectkube.outputs['vers.scrversion'] ]
+      repversion: $[ dependencies.connectkube.outputs['vers.dockversion'] ]
     displayName: qaldeploy
     pool:
       vmImage: ubuntu-latest 
@@ -61,15 +62,29 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          echo "outputs"
+          echo "debug outputs :"
+          echo "old version :"
           echo $(oldversion)
+          echo "new version :"
           echo $(newversion)
+          echo "dockerhub version :"
+          echo $(dockversion)
 
     - task: CmdLine@2
       name: updateyml
       inputs:
         script: |
           sed -i 's/{{ version }}/'$(newversion)'/g' app/app.yml
+
+    - task: Docker@2
+      condition: ne(variables.dockversion,variables.newversion)
+      inputs:
+        containerRegistry: 'container-connection'
+        repository: 'alaincpn/voteapp'
+        command: 'buildAndPush'
+        Dockerfile: 'Dockerfile'
+        tags: $(newversion)
+      name: "dockerup"
 
     - task: KubernetesManifest@0
       name: qaldeploy
