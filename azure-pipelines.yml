@@ -95,58 +95,7 @@ stages:
         kubernetesServiceConnection: 'aks-connection'
         namespace: 'qal'
         manifests: 'app/app.yml'
-        rolloutStatusTimeout: '90'
-
-# - stage: dockerimage
-#   dependsOn:
-#   - kubesetup
-#   condition: succeeded()
-#   displayName: dockerimage
-#   jobs:
-#   - job: qaldeploy
-#     variables:
-#       oldversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.kubeoutpversion'] ]
-#       newversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.scrversion'] ]
-#     displayName: qaldeploy
-#     pool:
-#       vmImage: ubuntu-latest 
-#     steps:
-
-#     - task: Bash@3
-#       inputs:
-#         targetType: 'inline'
-#         script: |
-#           echo "outputs"
-#           echo $oldversion
-#           echo $newversion
-         
-#     - task: Docker@2
-#       condition: ne(variables.oldversion,variables.newversion)
-#       inputs:
-#         containerRegistry: 'container-connection'
-#         repository: 'alaincpn/voteapp'
-#         command: 'buildAndPush'
-#         Dockerfile: 'Dockerfile'
-#         tags: $(newversion)
-#       name: "dockerup"
-
-    # - task: Docker@2
-    #   inputs:
-    #     containerRegistry: 'container-connection'
-    #     repository: 'alaincpn/voteapp'
-    #     command: 'buildAndPush'
-    #     Dockerfile: 'Dockerfile'
-
-    # - task: KubernetesManifest@0
-    #   name: qaldeploy
-    #   displayName: 'qaldeploy'
-    #   condition: ne(variables.oldversion,variables.newversion)
-    #   inputs:
-    #     action: 'deploy'
-    #     kubernetesServiceConnection: 'aks-connection'
-    #     namespace: 'qal'
-    #     manifests: 'app/app.yml'
-    #     rolloutStatusTimeout: '90'
+        rolloutStatusTimeout: '60'
 
   # - job: qalhasfailed
   #   dependsOn: qaldeploy
@@ -160,17 +109,15 @@ stages:
   #   steps:
   #     - script: echo "Qal has passed !"
   
-  # - job: kubecanary
-  #   dependsOn: qalhaspassed
-  #   steps:
-  #   - task: KubernetesManifest@0
-  #     name: kubecanary
-  #     condition: ne(variables['kubeoutpversion'],variables['scrversion'])
-  #     inputs:
-  #       action: 'deploy'
-  #       kubernetesServiceConnection: 'aks-connection'
-  #       namespace: 'prod'
-  #       strategy: 'canary'
-  #       percentage: '10'
-  #       manifests: 'app/app.yml'
-  #       rolloutStatusTimeout: '60'
+
+    - task: KubernetesManifest@0
+      name: kubecanary
+      condition: ne(variables.oldversion,variables.newversion)
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'aks-connection'
+        namespace: 'prod'
+        strategy: 'canary'
+        percentage: '10'
+        manifests: 'app/app.yml'
+        rolloutStatusTimeout: '60'
