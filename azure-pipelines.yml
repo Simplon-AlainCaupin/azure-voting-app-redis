@@ -65,6 +65,12 @@ stages:
           echo $(oldversion)
           echo $(newversion)
 
+    - task: CmdLine@2
+      name: updateyml
+      inputs:
+        script: |
+          sed -i 's/{{ version }}/'$(newversion)'/g' app/app.yml
+
     - task: KubernetesManifest@0
       name: qaldeploy
       displayName: 'qaldeploy'
