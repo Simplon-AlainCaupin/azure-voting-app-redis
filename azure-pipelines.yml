@@ -51,7 +51,7 @@ stages:
 
   - job: qaldeploy
     dependsOn:
-    - getvars
+    - connectkube
     condition: succeeded()
     variables:
       oldversion: $[ dependencies.kubesetup.connectkube.outputs['vers.kubeoutpversion'] ]
