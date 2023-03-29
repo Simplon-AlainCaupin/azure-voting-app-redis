@@ -66,8 +66,8 @@ stages:
         targetType: 'inline'
         script: |
           echo "outputs"
-          echo $oldversion
-          echo $newversion
+          echo $(oldversion)
+          echo $(newversion)
 
     # - task: Bash@3
     #   inputs:
