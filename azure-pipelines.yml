@@ -54,8 +54,8 @@ stages:
     - getvars
     condition: succeeded()
     variables:
-      oldversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.kubeoutpversion'] ]
-      newversion: $[ stageDependencies.kubesetup.getvars.outputs['vers.scrversion'] ]
+      oldversion: $[ dependencies.kubesetup.getvars.outputs['vers.kubeoutpversion'] ]
+      newversion: $[ dependencies.kubesetup.getvars.outputs['vers.scrversion'] ]
     displayName: qaldeploy
     pool:
       vmImage: ubuntu-latest 
