@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: redis
-        image: redis
+        image: redis:5.0.4
         args: ["--requirepass", "$(REDIS_PWD)"]
         env:
         - name: REDIS_PWD
@@ -26,10 +26,10 @@ spec:
               key: REDIS_PWD
         resources:
           requests:
-            cpu: 100m
+            cpu: 250m
             memory: 128Mi
           limits:
-            cpu: 250m
+            cpu: 500m
             memory: 256Mi
         volumeMounts:
         - name: redis-data
