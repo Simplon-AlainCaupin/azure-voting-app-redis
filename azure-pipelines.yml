@@ -95,8 +95,8 @@ stages:
         action: 'deploy'
         kubernetesServiceConnection: 'aks-connection'
         namespace: 'qal'
-        manifests: '**/app/app-deploy.yml'
-        rolloutStatusTimeout: '60'
+        manifests: 'app/app-deploy.yml'
+  #      rolloutStatusTimeout: '60'
 
   # - job: qalhasfailed
   #   dependsOn: qaldeploy
@@ -120,5 +120,5 @@ stages:
         namespace: 'prod'
         strategy: 'canary'
         percentage: '10'
-        manifests: '**/app/app-deploy.yml'
+        manifests: 'app/app-deploy.yml'
         rolloutStatusTimeout: '60'
