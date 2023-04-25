@@ -29,3 +29,6 @@ La partie test n'est pas encore prise en compte dans le pipeline,
 Pour le moment seule la modification du code source de l'application permet le déclenchement.
 
 A faire : test de montée en charge et déclenchement manuel de la Canary Release si test réussi.
+
+
+az aks create -n akslain -g brief8lain --network-plugin azure --node-count 2 -a ingress-appgw --appgw-name appGWlain --appgw-subnet-cidr "10.225.0.0/16" --generate-ssh-keys
