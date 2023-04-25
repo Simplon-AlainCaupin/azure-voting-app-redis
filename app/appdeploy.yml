@@ -47,7 +47,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: voteapp
+    name: appvote
   targetCPUUtilizationPercentage: 70
 ---
 apiVersion: v1
