@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: appvote
-        image: alaincpn/voteapp:1.0.124
+        image: alaincpn/voteapp:{{ version }}
         resources:
           requests:
             cpu: 250m
@@ -53,7 +53,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: clustvoteapp
+  name: clustervoteapp
 spec:
   type: ClusterIP
   ports:
