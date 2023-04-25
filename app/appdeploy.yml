@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: appvote
-        image: alaincpn/voteapp:{{ version }}
+        image: alaincpn/voteapp:1.0.124
         resources:
           requests:
             cpu: 250m
@@ -32,7 +32,7 @@ spec:
         - name: REDIS_PWD
           valueFrom:
             secretKeyRef:
-              name: redisp
+              name: redis
               key: REDIS_PWD
         - name: STRESS_SECS
           value: "2"

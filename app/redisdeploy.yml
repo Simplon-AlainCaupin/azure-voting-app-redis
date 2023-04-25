@@ -28,7 +28,7 @@ spec:
         - name: REDIS_PWD
           valueFrom:
             secretKeyRef:
-              name: redisp
+              name: redis
               key: password
         ports:
         - containerPort: 6379
