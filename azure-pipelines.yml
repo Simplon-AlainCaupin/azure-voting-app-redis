@@ -77,15 +77,15 @@ stages:
         script: |
           sed -i 's/{{ version }}/'$(newversion)'/g' app/app-deploy.yml
 
-    - task: Docker@2
-      condition: ne(variables.dockversion,variables.newversion)
-      inputs:
-        containerRegistry: 'container-connection'
-        repository: 'alaincpn/voteapp'
-        command: 'buildAndPush'
-        Dockerfile: 'Dockerfile'
-        tags: $(newversion)
-      name: "dockerup"
+    # - task: Docker@2
+    #   condition: ne(variables.dockversion,variables.newversion)
+    #   inputs:
+    #     containerRegistry: 'container-connection'
+    #     repository: 'alaincpn/voteapp'
+    #     command: 'buildAndPush'
+    #     Dockerfile: 'Dockerfile'
+    #     tags: $(newversion)
+    #   name: "dockerup"
 
     - task: KubernetesManifest@0
       name: qaldeploy
