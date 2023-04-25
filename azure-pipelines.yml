@@ -96,7 +96,7 @@ stages:
         kubernetesServiceConnection: 'aks-connection'
         namespace: 'qal'
         manifests: 'app/appdeploy.yml'
-        rolloutStatusTimeout: '90'
+        rolloutStatusTimeout: '60'
 
   # - job: qalhasfailed
   #   dependsOn: qaldeploy
