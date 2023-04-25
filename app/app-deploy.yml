@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: appvote
-        image: simplonasa/azure_voting_app:{{ version }}
+        image: alaincpn/voteapp:{{ version }}
         resources:
           requests:
             cpu: 100m
