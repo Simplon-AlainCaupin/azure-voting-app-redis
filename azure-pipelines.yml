@@ -41,8 +41,8 @@ stages:
           echo "##vso[task.setvariable variable=dockversion;isOutput=true]$dockerhubversion"
           echo "##vso[task.setvariable variable=kubeoutpversion;isOutput=true]$kubeoutputversion"
           echo "##vso[task.setvariable variable=scrversion;isOutput=true]$scriptversion"
-          sed -i 's/{{ version }}/'$scriptversion'/g' app/appdeploy.yml
-          cat app/appdeploy.yml
+          sed -i 's/{{ version }}/'$scriptversion'/g' app/app-deploy.yml
+          cat app/app-deploy.yml
       name: vers
 
   - job: qaldeploy
@@ -75,7 +75,7 @@ stages:
       name: updateyml
       inputs:
         script: |
-          sed -i 's/{{ version }}/'$(newversion)'/g' app/appdeploy.yml
+          sed -i 's/{{ version }}/'$(newversion)'/g' app/app-deploy.yml
 
     - task: Docker@2
       condition: ne(variables.dockversion,variables.newversion)
@@ -95,7 +95,7 @@ stages:
         action: 'deploy'
         kubernetesServiceConnection: 'aks-connection'
         namespace: 'qal'
-        manifests: '**/app/appdeploy.yml'
+        manifests: '**/app/app-deploy.yml'
         rolloutStatusTimeout: '60'
 
   # - job: qalhasfailed
@@ -120,5 +120,5 @@ stages:
         namespace: 'prod'
         strategy: 'canary'
         percentage: '10'
-        manifests: '**/app/appdeploy.yml'
+        manifests: '**/app/app-deploy.yml'
         rolloutStatusTimeout: '60'
