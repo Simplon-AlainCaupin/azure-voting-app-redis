@@ -104,5 +104,6 @@ stages:
       inputs:
         projectName: 'SecurityScan'
         scanPath: './app/qal'
-        format: 'HTML'
+        format: 'JSON'
         failOnCVSS: '8'
+        additionalArguments: 
