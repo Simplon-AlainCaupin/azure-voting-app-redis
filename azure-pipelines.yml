@@ -44,7 +44,7 @@ stages:
       displayName: create dockerhub image
       condition: ne(variables.verold,variables.vernew)
       inputs:
-        containerRegistry: 'dockerhub connection'
+        containerRegistry: 'container-connection'
         repository: 'alaincpn/voteapp'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
