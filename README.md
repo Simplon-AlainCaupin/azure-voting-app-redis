@@ -34,4 +34,6 @@ A faire : test de montée en charge et déclenchement manuel de la Canary Releas
 az aks create -n akslain -g brief8lain --network-plugin azure --node-count 2 -a ingress-appgw --appgw-name appGWlain --appgw-subnet-cidr "10.225.0.0/16" --generate-ssh-keys
 
 
-Pour HELM : voir comment mettre le pwd + persistent storage
+Pour HELM : voir comment mettre le pwd + persistent storage : ..pas assez de temps
+
+http://lain-brief8.westeurope.cloudapp.azure.com/
