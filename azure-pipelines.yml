@@ -72,7 +72,7 @@ stages:
     - task: CmdLine@2
       name: waitforcharge
       inputs:
-        script: 'sleep 90'
+        script: 'sleep 60'
 
     - task: Kubernetes@1
       name : recupNbPods
@@ -85,3 +85,16 @@ stages:
         configuration: './app/qal/app.yml'
         secretType: 'dockerRegistry'
         containerRegistryType: 'Azure Container Registry'
+
+    - task: CmdLine@2
+      name: nbpod
+      inputs:
+        script: |
+          nbrpod=$(echo $RECUPNBPODS_KUBECTLOUTPUT | jq '.items[0].spec.replicas')
+          echo $nbrpod
+          echo "##vso[task.setvariable variable=podnumber;isOutput=true]$nbrpod"
+    - task: CmdLine@2
+      condition: ne(variables['podnumber'],2)
+      name: scalework
+      inputs:
+        script: echo 'Scaling complete'
