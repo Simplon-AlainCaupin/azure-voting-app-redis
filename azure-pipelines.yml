@@ -20,7 +20,6 @@ stages:
         secretType: 'dockerRegistry'
       name: "kubs"
 
-stages:
 - stage: Build_docker_image
   displayName: Build docker image 
   jobs:
