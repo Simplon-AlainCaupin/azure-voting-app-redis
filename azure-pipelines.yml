@@ -1,124 +1,33 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-latest
-
 stages:
-- stage: kubesetup
+- stage: Build_docker_image
+  displayName: Build docker image 
   jobs:
-  - job: connectkube
-    steps:
 
-    - task: Kubernetes@1
-      inputs:
-        connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'aks-connection'
-        namespace: 'qal'
-        command: 'get'
-        arguments: 'deployments'
-        secretType: 'dockerRegistry'
-      name: "kubs"
-
-    - task: CmdLine@2
-      inputs:
-        script: |
-          ls -ll
-          echo "------"
-          dockerhubversion=$((curl 'https://hub.docker.com/v2/repositories/alaincpn/voteapp/tags' | jq '."results"[0]["name"]')| sed 's/\"//g')
-          echo "Version sur dockerhub : "
-          echo $dockerhubversion
-          kubeoutputversion=$(echo $KUBS_KUBECTLOUTPUT | jq '.items[1].spec.template.spec.containers[].image' | cut -d: -f2 | sed 's/"//')
-          echo "Version output kubectl : "
-          echo $kubeoutputversion
-          scriptversion=$(cat azure-vote/main.py | grep -E "^ver = \"[0-9.]+\"\$"|awk -F\" {'print $2'})
-          echo "Version dans le script : "
-          echo $scriptversion
-          echo "##vso[task.setvariable variable=dockversion;isOutput=true]$dockerhubversion"
-          echo "##vso[task.setvariable variable=kubeoutpversion;isOutput=true]$kubeoutputversion"
-          echo "##vso[task.setvariable variable=scrversion;isOutput=true]$scriptversion"
-          sed -i 's/{{ version }}/'$scriptversion'/g' app/app-deploy.yml
-          cat app/app-deploy.yml
-      name: vers
-
-  - job: qaldeploy
-    dependsOn:
-    - connectkube
-    condition: succeeded()
-    variables:
-      oldversion: $[ dependencies.connectkube.outputs['vers.kubeoutpversion'] ]
-      newversion: $[ dependencies.connectkube.outputs['vers.scrversion'] ]
-      repversion: $[ dependencies.connectkube.outputs['vers.dockversion'] ]
-    displayName: qaldeploy
+  - job: Get_Version
+    displayName: Get Version Build 
     pool:
       vmImage: ubuntu-latest 
     steps:
 
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: |
-          echo "debug outputs :"
-          echo "old version :"
-          echo $(oldversion)
-          echo "new version :"
-          echo $(newversion)
-          echo "dockerhub version :"
-          echo $(repversion)
-      name: debugVars
-
     - task: CmdLine@2
-      name: updateyml
+      displayName: Comparaison version application
       inputs:
         script: |
-          sed -i 's/{{ version }}/'$(newversion)'/g' app/app-deploy.yml
-
-    # - task: Docker@2
-    #   condition: ne(variables.dockversion,variables.newversion)
-    #   inputs:
-    #     containerRegistry: 'container-connection'
-    #     repository: 'alaincpn/voteapp'
-    #     command: 'buildAndPush'
-    #     Dockerfile: 'Dockerfile'
-    #     tags: $(newversion)
-    #   name: "dockerup"
-
-    - task: KubernetesManifest@0
-      name: qaldeploy
-      displayName: 'qaldeploy'
-      condition: ne(variables.oldversion,variables.newversion)
-      inputs:
-        action: 'deploy'
-        kubernetesServiceConnection: 'aks-connection'
-        namespace: 'qal'
-        manifests: 'app/app-deploy.yml'
-  #      rolloutStatusTimeout: '60'
-
-  # - job: qalhasfailed
-  #   dependsOn: qaldeploy
-  #   condition: failed()
-  #   steps:
-  #     - script: echo "Qal has failed !"
-
-  # - job: qalhaspassed
-  #   dependsOn: qaldeploy
-  #   condition: succeeded()
-  #   steps:
-  #     - script: echo "Qal has passed !"
+          versionnew=$(cat azure-vote/main.py | grep -E "^ver = \"[0-9.]+\"\$"|awk -F\" {'print $2'})
+          versionold=$(curl -s http://lain-brief8.westeurope.cloudapp.azure.com | grep -o 'Azure Voting App v[0-9]\+\.[0-9]\+\.[0-9]\+' | sed 's/^.*v//;s/ on.*$//' | head -n1)
+          echo "##vso[task.setvariable variable=verold]$versionold"
+          echo "##vso[task.setvariable variable=vernew]$versionnew"
   
-
-    - task: KubernetesManifest@0
-      name: kubecanary
-      condition: ne(variables.oldversion,variables.newversion)
+    - task: Docker@2
+      name: CreateDocImage
+      displayName: create dockerhub image
+      condition: ne(variables.verold,variables.vernew)
       inputs:
-        action: 'deploy'
-        kubernetesServiceConnection: 'aks-connection'
-        namespace: 'prod'
-        strategy: 'canary'
-        percentage: '10'
-        manifests: 'app/app-deploy.yml'
-        rolloutStatusTimeout: '60'
+        containerRegistry: 'dockerhub connection'
+        repository: 'alaincpn/voteapp'
+        command: 'buildAndPush'
+        Dockerfile: 'Dockerfile'
+        tags: 'latest'
