@@ -75,13 +75,13 @@ stages:
         script: 'sleep 90'
 
     - task: Kubernetes@1
-      name : recupPods
+      name : recupNbPods
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'aks-connection'
         namespace: 'qal'
         command: 'get'
         useConfigurationFile: true
-        configuration: './app/app.yml'
+        configuration: './app/qal/app.yml'
         secretType: 'dockerRegistry'
         containerRegistryType: 'Azure Container Registry'
