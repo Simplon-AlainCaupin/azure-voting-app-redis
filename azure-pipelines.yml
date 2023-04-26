@@ -85,4 +85,3 @@ stages:
         configuration: './app/app.yml'
         secretType: 'dockerRegistry'
         containerRegistryType: 'Azure Container Registry'
-      name: qalpods
