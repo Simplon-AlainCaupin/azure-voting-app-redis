@@ -44,6 +44,7 @@ stages:
     pool:
       vmImage: 'ubuntu-latest' 
     steps:
+
     - task: KubernetesManifest@0
       name: kubeonqal
       displayName: deploy on qal ns
@@ -52,10 +53,36 @@ stages:
         kubernetesServiceConnection: 'aks-connection'
         namespace: 'qal'
         manifests: '**/app/qal/*'
+
     - task: Bash@3
       name: waitingfordeploy
       condition: succeeded()
       displayName: waiting for deployment
       inputs:
         targetType: 'inline'
-        script: 'sleep 45'
+        script: 'sleep 15'
+
+    - task: CmdLine@2
+      name : testcharge
+      displayName: Test charge sur qal
+      inputs:
+        script: |
+          seq 250 | parallel --max-args 0  --jobs 20 "curl -k -iF 'vote=free' http://lain-brief8.westeurope.cloudapp.azure.com"
+
+    - task: CmdLine@2
+      name: waitforcharge
+      inputs:
+        script: 'sleep 90'
+
+    - task: Kubernetes@1
+      name : recupPods
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'aks-conection'
+        namespace: 'qal'
+        command: 'get'
+        useConfigurationFile: true
+        configuration: './app/app.yml'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Azure Container Registry'
+      name: qalpods
