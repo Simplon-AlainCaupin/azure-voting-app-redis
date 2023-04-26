@@ -1,4 +1,5 @@
 trigger:
+
 - master
 
 pool:
@@ -98,3 +99,10 @@ stages:
       name: scalework
       inputs:
         script: echo 'Scaling complete'
+
+    - task: dependency-check-build-task@6
+      inputs:
+        projectName: 'SecurityScan'
+        scanPath: './app/qal'
+        format: 'HTML'
+        failOnCVSS: '8'
