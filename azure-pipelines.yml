@@ -37,23 +37,23 @@ stages:
         Dockerfile: 'Dockerfile'
         tags: 'latest'
 
-- stage: QAL_Deployment
-  displayName: Qal
+- stage: Test_Deployment
+  displayName: testdep
   jobs:
-  - job: QAL_Deploy
+  - job: Test_Deploy
     displayName: Deploy on QAL 
     pool:
       vmImage: 'ubuntu-latest' 
     steps:
 
     - task: KubernetesManifest@0
-      name: kubeonqal
+      name: kuberneTest
       displayName: deploy on qal ns
       inputs:
         action: 'deploy'
         kubernetesServiceConnection: 'aks-connection'
-        namespace: 'qal'
-        manifests: '**/app/qal/*'
+        namespace: 'testenv'
+        manifests: '**/app/test/*'
 
     - task: Bash@3
       name: waitingfordeploy
@@ -61,7 +61,7 @@ stages:
       displayName: waiting for deployment
       inputs:
         targetType: 'inline'
-        script: 'sleep 15'
+        script: 'sleep 1'
 
     # - task: CmdLine@2
     #   name : testcharge
@@ -75,17 +75,17 @@ stages:
     #   inputs:
     #     script: 'sleep 60'
 
-    - task: Kubernetes@1
-      name : recupNbPods
-      inputs:
-        connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'aks-connection'
-        namespace: 'qal'
-        command: 'get'
-        useConfigurationFile: true
-        configuration: './app/qal/app.yml'
-        secretType: 'dockerRegistry'
-        containerRegistryType: 'Azure Container Registry'
+    # - task: Kubernetes@1
+    #   name : recupNbPods
+    #   inputs:
+    #     connectionType: 'Kubernetes Service Connection'
+    #     kubernetesServiceEndpoint: 'aks-connection'
+    #     namespace: 'qal'
+    #     command: 'get'
+    #     useConfigurationFile: true
+    #     configuration: './app/qal/app.yml'
+    #     secretType: 'dockerRegistry'
+    #     containerRegistryType: 'Azure Container Registry'
 
     # - task: CmdLine@2
     #   name: nbpod
