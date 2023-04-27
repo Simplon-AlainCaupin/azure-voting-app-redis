@@ -7,48 +7,48 @@ pool:
 
 stages:
 
-- stage: Build_docker_image
-  displayName: Build docker image 
-  jobs:
+# - stage: Build_docker_image
+#   displayName: Build docker image 
+#   jobs:
 
-  - job: Get_Version
-    displayName: Get Version Build 
-    pool:
-      vmImage: ubuntu-latest 
-    steps:
+#   - job: Get_Version
+#     displayName: Get Version Build 
+#     pool:
+#       vmImage: ubuntu-latest 
+#     steps:
 
-    - task: CmdLine@2
-      displayName: Comparaison version application
-      inputs:
-        script: |
-          versionnew=$(cat azure-vote/main.py | grep -E "^ver = \"[0-9.]+\"\$"|awk -F\" {'print $2'})
-          versionold=$(curl -s http://lain-brief8.westeurope.cloudapp.azure.com | grep -o 'Azure Voting App v[0-9]\+\.[0-9]\+\.[0-9]\+' | sed 's/^.*v//;s/ on.*$//' | head -n1)
-          echo "##vso[task.setvariable variable=verold]$versionold"
-          echo "##vso[task.setvariable variable=vernew]$versionnew"
+#     - task: CmdLine@2
+#       displayName: Comparaison version application
+#       inputs:
+#         script: |
+#           versionnew=$(cat azure-vote/main.py | grep -E "^ver = \"[0-9.]+\"\$"|awk -F\" {'print $2'})
+#           versionold=$(curl -s http://lain-brief8.westeurope.cloudapp.azure.com | grep -o 'Azure Voting App v[0-9]\+\.[0-9]\+\.[0-9]\+' | sed 's/^.*v//;s/ on.*$//' | head -n1)
+#           echo "##vso[task.setvariable variable=verold]$versionold"
+#           echo "##vso[task.setvariable variable=vernew]$versionnew"
   
-    - task: Docker@2
-      name: CreateDockerImage
-      displayName: create dockerhub image
-      condition: ne(variables.verold,variables.vernew)
-      inputs:
-        containerRegistry: 'container-connection'
-        repository: 'alaincpn/voteapp'
-        command: 'buildAndPush'
-        Dockerfile: 'Dockerfile'
-        tags: 'latest'
+#     - task: Docker@2
+#       name: CreateDockerImage
+#       displayName: create dockerhub image
+#       condition: ne(variables.verold,variables.vernew)
+#       inputs:
+#         containerRegistry: 'container-connection'
+#         repository: 'alaincpn/voteapp'
+#         command: 'buildAndPush'
+#         Dockerfile: 'Dockerfile'
+#         tags: 'latest'
 
 - stage: Test_Deployment
   displayName: testdep
   jobs:
   - job: Test_Deploy
-    displayName: Deploy on QAL 
+    displayName: Deploy on Test 
     pool:
       vmImage: 'ubuntu-latest' 
     steps:
 
     - task: KubernetesManifest@0
       name: kuberneTest
-      displayName: deploy on qal ns
+      displayName: deploy on testing ns
       inputs:
         action: 'deploy'
         kubernetesServiceConnection: 'aks-connection'
