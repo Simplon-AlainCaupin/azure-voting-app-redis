@@ -111,7 +111,7 @@ stages:
       - task: dependency-check-build-task@6
         inputs:
           projectName: 'SecurityScan'
-          scanPath: '**'
+          scanPath: 'http://www.lain-brief8.westeurope.cloudapp.azure.com'
           format: 'JUNIT'
           reportFilename: 'testreport'
           failOnCVSS: '8'
