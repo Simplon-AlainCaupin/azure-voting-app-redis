@@ -121,7 +121,7 @@ stages:
         displayName: check-nb-dependencies
         inputs:
           script: |
-            resultest=$(cat ./home/vsts/work/1/TestResults/dependency-check/testreport/dependency-check-report.html)
+            resultest"=$(cat ./home/vsts/work/1/TestResults/dependency-check/testreport/dependency-check-report.html)""
             echo "#####DEBUG#####"
             echo $resultest
             echo "##vso[task.setvariable variable=restest]$resultest"
