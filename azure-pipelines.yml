@@ -100,10 +100,26 @@ stages:
     #   inputs:
     #     script: echo 'Scaling complete'
 
-    - task: dependency-check-build-task@6
-      inputs:
-        projectName: 'SecurityScan'
-        scanPath: '**'
-        format: 'JSON'
-        failOnCVSS: '8'
-        additionalArguments: 
+- stage: dependency_check
+  displayName: Run dependency check
+  jobs:
+
+  - job: dep_check
+    displayName: Dependency check
+    
+    steps:
+      - task: dependency-check-build-task@6
+        inputs:
+          projectName: 'SecurityScan'
+          scanPath: '**'
+          format: 'HTML'
+          reportFilename: 'testreport'
+          failOnCVSS: '8'
+          additionalArguments: 
+
+      # - task: CmdLine@2
+      #   displayName: Comparaison version application
+      #   inputs:
+      #     script: |
+      #       resultest=$(cat ./ | grep -E "^ver = \"[0-9.]+\"\$"|awk -F\" {'print $2'})
+      #       echo "##vso[task.setvariable variable=restest]$resultest"
