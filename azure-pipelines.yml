@@ -108,14 +108,14 @@ stages:
     displayName: Dependency check
     
     steps:
-      - task: dependency-check-build-task@6
-        inputs:
-          projectName: 'SecurityScan'
-          scanPath: '**'
-          format: 'JUNIT'
-          reportFilename: 'testreport'
-          failOnCVSS: '8'
-          additionalArguments: 
+      # - task: dependency-check-build-task@6
+      #   inputs:
+      #     projectName: 'SecurityScan'
+      #     scanPath: '**'
+      #     format: 'JUNIT'
+      #     reportFilename: 'testreport'
+      #     failOnCVSS: '8'
+      #     additionalArguments: 
 
       # - task: CmdLine@2
       #   displayName: check-nb-dependencies
@@ -126,8 +126,16 @@ stages:
       #       echo $resultest
       #       echo "##vso[task.setvariable variable=restest]$resultest"
 
-      - task: PublishTestResults@2
+      # - task: PublishTestResults@2
+      #   inputs:
+      #     testResultsFormat: 'JUnit'
+      #     testResultsFiles: '/home/vsts/work/1/TestResults/dependency-check/testreport/dependency-check-junit.xml'
+      #     failTaskOnFailedTests: true
+
+      - task: CmdLine@2
         inputs:
-          testResultsFormat: 'JUnit'
-          testResultsFiles: '/home/vsts/work/1/TestResults/dependency-check/testreport/dependency-check-junit.xml'
-          failTaskOnFailedTests: true
+          script: |
+            chmod -R 777 ./
+            docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://lain-brief8.westeurope.cloudapp.azure.com/:80 -x report.xml
+            true
+        displayName: "Owasp Container Scan"
