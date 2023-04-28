@@ -159,7 +159,8 @@ stages:
           testResultsFiles: './test-results.xml'
           failTaskOnFailedTests: true
           
-- stage: 'Manualvalidation'
+- stage: 'manualvalidationcheck'
+  condition: failed('dependency_check')
   dependsOn:
   - dependency_check
   displayName: 'Actions suite résultat tests' 
