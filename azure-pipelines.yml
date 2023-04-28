@@ -161,7 +161,7 @@ stages:
           
 - stage: 'Manualvalidation'
   dependsOn:
-  - dep_check
+  - dependency_check
   condition: failed('dep_check') 
   displayName: 'Failles détectées, en attente de validation manuelle' 
   jobs:
