@@ -158,3 +158,22 @@ stages:
           testResultsFormat: 'NUnit'
           testResultsFiles: './test-results.xml'
           failTaskOnFailedTests: true
+          
+- stage: 'Manualvalidation'
+  dependsOn:
+  - dep_check
+  condition: failed('dep_check') 
+  displayName: 'Failles détectées, en attente de validation manuelle' 
+  jobs:
+  - job: waitForValidation
+    displayName: Wait for external validation
+    pool: server
+    timeoutInMinutes: 7800
+    steps:
+    - task: ManualValidation@0
+      timeoutInMinutes: 7800
+      inputs:
+        notifyUsers: |
+          acaupin.ext@simplonformations.onmicrosoft.com
+        instructions: 'Merci de valider le déploiement'
+        onTimeout: 'resume'
