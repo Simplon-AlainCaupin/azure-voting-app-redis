@@ -162,7 +162,6 @@ stages:
 - stage: 'Manualvalidation'
   dependsOn:
   - dependency_check
-  condition: failed('dep_check') 
   displayName: 'Actions suite résultat tests' 
   jobs:
   - job: waitForValidation
