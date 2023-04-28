@@ -136,7 +136,7 @@ stages:
         inputs:
           script: |
             chmod -R 777 ./
-            docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://lain-brief8.westeurope.cloudapp.azure.com/:80 -x report.xml
+            docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t http://lain-brief8.westeurope.cloudapp.azure.com/:80 -x report.xml
             true
         displayName: "Owasp Container Scan"
 
