@@ -68,7 +68,7 @@ stages:
     #   displayName: Test charge sur qal
     #   inputs:
     #     script: |
-    #       seq 250 | parallel --max-args 0  --jobs 20 "curl -k -iF 'vote=free' http://lain-brief8.westeurope.cloudapp.azure.com"
+    #       seq 200 | parallel --max-args 0  --jobs 20 "curl -k -iF 'vote=linux' http://lain-brief8.westeurope.cloudapp.azure.com"
 
     # - task: CmdLine@2
     #   name: waitforcharge
