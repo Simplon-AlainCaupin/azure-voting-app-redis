@@ -163,7 +163,7 @@ stages:
   dependsOn:
   - dependency_check
   condition: failed('dep_check') 
-  displayName: 'Failles détectées, en attente de validation manuelle' 
+  displayName: 'Actions suite résultat tests' 
   jobs:
   - job: waitForValidation
     displayName: Wait for external validation
