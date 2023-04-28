@@ -194,5 +194,5 @@ stages:
       inputs:
         action: 'deploy'
         kubernetesServiceConnection: 'aks-connection'
-        namespace: 'QAL'
+        namespace: 'qal'
         manifests: '**/app/qal/*'
