@@ -179,6 +179,7 @@ stages:
         onTimeout: 'resume'
 
 - stage: QAL_Deployment
+  condition: succeeded('manualvalidationcheck')
   displayName: qaldep
   jobs:
   - job: QAL_Deploy
